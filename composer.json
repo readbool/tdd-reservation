@@ -3,13 +3,14 @@
     "description": "TDD using pestphp",
     "type": "project",
     "require": {
-        "pestphp/pest": "1.x-dev"
+        "pestphp/pest": "1.x-dev",
+        "php": "*"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
             "Readbool\\ReservationTdd\\": "src/",
-            "Readbool\\ReservationTdd\\Tests": "tests/"
+            "Readbool\\ReservationTdd\\Tests\\": "tests/"
         }
     },
     "authors": [

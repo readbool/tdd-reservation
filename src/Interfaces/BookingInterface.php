@@ -10,5 +10,5 @@ interface BookingInterface
 
     public function getStatus(): string;
 
-    public function setReservationDetails(string $name, string $startDate, string $endDate, ?float $paymentAmount): void;
+    public function setReservationDetails(string $name, string $startDate, string $endDate, string $rentType, ?float $paymentAmount): void;
 }

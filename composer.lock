@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9e8c900af68900f7ca2c2b19930de30",
+    "content-hash": "5db66bfb0abc03d48a27604d37df2ce2",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -3049,7 +3049,9 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

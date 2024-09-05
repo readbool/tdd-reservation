@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Readbool\ReservationTdd;
 
 use InvalidArgumentException;
+use Readbool\ReservationTdd\Enums\RentableTypeEnum;
 use Readbool\ReservationTdd\Interfaces\BookingInterface;
 use Readbool\ReservationTdd\Interfaces\PaymentGatewayInterface;
 
@@ -12,7 +13,7 @@ final class Booking implements BookingInterface
 {
     private array $reservationDetails = [];
 
-    public function __construct(private readonly PaymentGatewayInterface $paymentGateway)
+    public function __construct(private readonly PaymentGatewayInterface $paymentGateway, private readonly RentingResolver $resolver)
     {
     }
 
@@ -26,9 +27,9 @@ final class Booking implements BookingInterface
         return $this->paymentGateway->getStatus();
     }
 
-    public function setReservationDetails(string $name, string $startDate, string $endDate, ?float $paymentAmount): void
+    public function setReservationDetails(string $name, string $startDate, string $endDate, string $rentType, ?float $paymentAmount): void
     {
-        if ($paymentAmount < 0 || $paymentAmount === null) {
+        if ($paymentAmount <= 0 || $paymentAmount === null) {
             throw  new InvalidArgumentException('Invalid payment amount');
         }
 
@@ -36,6 +37,23 @@ final class Booking implements BookingInterface
         $this->reservationDetails['startDate'] = $startDate;
         $this->reservationDetails['endDate'] = $endDate;
         $this->reservationDetails['paymentAmount'] = $paymentAmount;
+
+        $resolved = $this->resolver->resolve(RentableTypeEnum::tryFrom($rentType));
+
+        if ($resolved === null) {
+            throw  new InvalidArgumentException('Invalid renting type');
+        }
+
+        if ($resolved->getPrice() !== $paymentAmount) {
+            throw new InvalidArgumentException('Invalid payment amount');
+        }
+
+        $this->reservationDetails['rentingDetails'] = [
+            'name' => $resolved->getName(),
+            'price' => $resolved->getPrice(),
+            'type' => $resolved->getType()->value,
+        ];
+
         $this->paymentGateway->setPayment($paymentAmount);
     }
 }
